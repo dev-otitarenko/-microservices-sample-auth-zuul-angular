@@ -1,0 +1,71 @@
+# Server conf
+server:
+  port: 8810
+
+# Spring section
+spring:
+  application:
+    name: gateway-service
+
+# Zuul section
+zuul:
+  prefix: /api
+  sensitiveHeaders:
+  retryable: true
+  ribbon:
+    eager-load:
+      enabled: true
+  ribbon-isolation-strategy: thread
+  thread-pool:
+    use-separate-thread-pools: true
+  host:
+    connect-timeout-millis: 40000
+    socket-timeout-millis: 40000
+  routes:
+    auth-service-route:
+      path: /oauth/**
+      service-id: auth-server
+      strip-prefix: false
+#    events-service:
+#      path: /events/**
+#      serviceId: logs-service
+#      stripPrefix: false
+
+# Ribbon conf
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 1200000
+#  eureka:
+#    enabled: false
+
+# Hystrix conf
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds: 120000
+
+# eureka section
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: ${app.eureka.server}
+    healthcheck:
+      enabled: true
+
+#SLF4J
+#SLF4J
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: ERROR
+    com.maestro.app.sample2.ms: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

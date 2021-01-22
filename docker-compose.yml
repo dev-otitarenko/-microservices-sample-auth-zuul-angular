@@ -13,6 +13,8 @@ services:
     environment:
       JAVA_OPTS: -XX:MaxRAM=256m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
       app.eureka.server: http://localhost:8761/eureka/
+    networks:
+      - app_net
     volumes:
       - ./docker/eureka/logs:/tmp/logs
 
@@ -35,6 +37,8 @@ services:
       app.db.user: sa
       app.db.psw: Passw0rd2
       app.eureka.server: http://eureka:8761/eureka/
+    networks:
+      - app_net
     depends_on:
       - eureka
 
@@ -60,6 +64,8 @@ services:
       auth-server.secret: password
       auth-server.url: http://auth-service:8811
       app.eureka.server: http://eureka:8761/eureka/
+    networks:
+      - app_net
     depends_on:
       - eureka
 
@@ -85,6 +91,8 @@ services:
       auth-server.secret: password
       auth-server.url: http://auth-service:8811
       app.eureka.server: http://eureka:8761/eureka/
+    networks:
+      - app_net
     depends_on:
       - eureka
 
@@ -102,5 +110,11 @@ services:
     environment:
       JAVA_OPTS: -XX:MaxRAM=256m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
       app.eureka.server: http://eureka:8761/eureka/
+    networks:
+      - app_net
     depends_on:
       - eureka
+
+networks:
+  app_net:
+    driver: bridge

@@ -27,6 +27,14 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 
+# Eureka conf
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: ${app.eureka.server}
+
 #SLF4J
 logging:
   level:

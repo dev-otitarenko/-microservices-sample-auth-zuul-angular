@@ -26,10 +26,14 @@ zuul:
       path: /oauth/**
       service-id: auth-server
       strip-prefix: false
-#    events-service:
-#      path: /events/**
-#      serviceId: logs-service
-#      stripPrefix: false
+    service1-route:
+      path: /svc1/**
+      serviceId: service1
+      stripPrefix: false
+    service2-route:
+      path: /svc2/**
+      serviceId: service2
+      stripPrefix: false
 
 # Ribbon conf
 ribbon:

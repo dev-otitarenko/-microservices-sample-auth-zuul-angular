@@ -1,0 +1,32 @@
+# Spring conf
+spring:
+  application:
+    name: eureka-server
+
+# Server conf
+server:
+  port: 8761
+
+# Eureka
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    prefer-ip-address: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: ${app.eureka.server}
+  server:
+    wait-time-in-ms-when-sync-empty: 3000
+    enable-self-preservation: true
+
+# Slf4J Logging
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: ERROR
+    com.maestro.app.sample2.ms: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

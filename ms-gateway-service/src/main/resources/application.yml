@@ -24,7 +24,7 @@ zuul:
   routes:
     auth-service-route:
       path: /oauth/**
-      service-id: auth-server
+      service-id: auth-service
       strip-prefix: false
     service1-route:
       path: /svc1/**

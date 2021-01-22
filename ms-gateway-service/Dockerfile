@@ -1,4 +1,4 @@
-FROM openjdk:8u181-jdk-alpine
+FROM amazoncorretto:8-alpine-jdk
 
 VOLUME ["/tmp", "/tmp/logs"]
 ADD /target/*.jar app.jar

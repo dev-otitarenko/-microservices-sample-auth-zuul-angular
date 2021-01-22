@@ -1,4 +1,4 @@
 # Description
-Sample of using microservices in docker and kubernetes
+Sample of using microservices in docker
 
 

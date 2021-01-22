@@ -1,0 +1,106 @@
+version: '2.3'
+
+services:
+  eureka:
+    build:
+      context: ./ms-discovery-eureka
+      dockerfile: Dockerfile
+    container_name: eureka
+    hostname: eureka
+    restart: always
+    ports:
+      - "8761:8761"
+    environment:
+      JAVA_OPTS: -XX:MaxRAM=256m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.eureka.server: http://localhost:8761/eureka/
+    volumes:
+      - ./docker/eureka/logs:/tmp/logs
+
+  auth-service:
+    build:
+      context: ./ms-auth-server
+      dockerfile: Dockerfile
+    container_name: auth-service
+    hostname: auth-service
+    restart: always
+    ports:
+      - "8811:8811"
+    volumes:
+      - ./docker/auth-server/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -Xmx200M -XX:MaxRAM=256M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.telemetry.level: INFO
+      app.db.server: sampledb
+      app.db.name: samples
+      app.db.user: sa
+      app.db.psw: Passw0rd2
+      app.eureka.server: http://eureka:8761/eureka/
+    depends_on:
+      - eureka
+
+  service1:
+    build:
+      context: ./ms-service-1
+      dockerfile: Dockerfile
+    container_name: service1
+    hostname: service1
+    restart: always
+    ports:
+      - "8812:8812"
+    volumes:
+      - ./docker/org-service/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -Xmx100M -XX:MaxRAM=128M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.telemetry.level: INFO
+      app.db.server: sampledb
+      app.db.name: samples
+      app.db.user: sa
+      app.db.psw: Passw0rd2
+      auth-server.user: adminapp
+      auth-server.secret: password
+      auth-server.url: http://auth-service:8811
+      app.eureka.server: http://eureka:8761/eureka/
+    depends_on:
+      - eureka
+
+  service2:
+    build:
+      context: ./ms-service-2
+      dockerfile: Dockerfile
+    container_name: service2
+    hostname: service2
+    restart: always
+    ports:
+      - "8813:8813"
+    volumes:
+      - ./docker/org-service/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -Xmx100M -XX:MaxRAM=128M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.telemetry.level: INFO
+      app.db.server: sampledb
+      app.db.name: samples
+      app.db.user: sa
+      app.db.psw: Passw0rd2
+      auth-server.user: adminapp
+      auth-server.secret: password
+      auth-server.url: http://auth-service:8811
+      app.eureka.server: http://eureka:8761/eureka/
+    depends_on:
+      - eureka
+
+  gateway-service:
+    build:
+      context: ./ms-gateway-service
+      dockerfile: Dockerfile
+    container_name:  gateway-service
+    hostname:  gateway-service
+    restart: always
+    ports:
+      - "8810:8810"
+    volumes:
+      - ./docker/gateway-service/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -XX:MaxRAM=256m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.eureka.server: http://eureka:8761/eureka/
+    depends_on:
+      - eureka

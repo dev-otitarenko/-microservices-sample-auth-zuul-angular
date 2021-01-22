@@ -3,7 +3,7 @@ version: '2.3'
 services:
   eureka:
     build:
-      context: ./discovery-eureka
+      context: ./ms-discovery-eureka
       dockerfile: Dockerfile
     container_name: eureka
     hostname: eureka
@@ -90,7 +90,7 @@ services:
 
   gateway-service:
     build:
-      context: ./gateway-service
+      context: ./ms-gateway-service
       dockerfile: Dockerfile
     container_name:  gateway-service
     hostname:  gateway-service
@@ -104,4 +104,3 @@ services:
       app.eureka.server: http://eureka:8761/eureka/
     depends_on:
       - eureka
-      - auth-server

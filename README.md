@@ -1,7 +1,23 @@
 # Description
 
-Sample of using microservices in docker containers.
-All services are logging in ELK
+Sample of using microservices in docker containers. Used libraries: OAuth, Security, OpenFeign, Zuul, Lombok.
+All services are logging in ELK stack.
+
+```sh
+@Component
+public class AuthRequestInterceptor implements RequestInterceptor {
+    @Override
+    public void apply(RequestTemplate requestTemplate) {
+        Authentication _auth = SecurityContextHolder.getContext().getAuthentication();
+        if (_auth != null) {
+            if (_auth.getDetails() instanceof  OAuth2AuthenticationDetails) {
+                String _token = ((OAuth2AuthenticationDetails) _auth.getDetails()).getTokenValue();
+                requestTemplate.header("Authorization", String.format("Bearer %s", _token));
+            }
+        }
+    }
+}
+```
 
 # Installing ELK
 
